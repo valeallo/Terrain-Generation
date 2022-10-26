@@ -191,14 +191,15 @@ public class TerrainGeneration : MonoBehaviour
         for (int y = 0; y < terrain.alphamapHeight; y++) { 
             for(int x = 0; x < terrain.alphamapWidth; x++)
             {
-                float x_normalized = (float)x / (float)terrain.alphamapWidth;
-                float y_normalized = (float)y / (float)terrain.alphamapHeight;
+                float y_normalized = (float)x / (float)terrain.alphamapWidth;
+                float x_normalized = (float)y / (float)terrain.alphamapHeight;
                 float height = terrain.GetHeight(Mathf.RoundToInt(x_normalized * terrain.heightmapResolution),Mathf.RoundToInt(y_normalized * terrain.heightmapResolution));
                 float steepness = terrain.GetSteepness(x_normalized, y_normalized);
                 height /= terrain.heightmapResolution;
                 float[] splat_weights = new float[terrain.alphamapLayers];
                 splat_weights[0] = 0.2f;
                 splat_weights[2] = height;
+               
                 if (height > 1)
                 {
                     Debug.Log("error height: " + height);
@@ -209,7 +210,7 @@ public class TerrainGeneration : MonoBehaviour
                 }
                 else
                 {
-                    splat_weights[1] = 0.5f - steepness / 90;
+                    splat_weights[1] = 0.5f - (steepness / 90) / 2;
                 }
                 float z = splat_weights.Sum();
                 for (int i = 0; i < terrain.alphamapLayers; i++)
